@@ -1,20 +1,19 @@
-
 /*
- * edited by Velleman / Patrick De Coninck
- * Read a card using a mfrc522 reader on your SPI interface
  * Pin layout should be as follows (on Arduino Uno - Velleman VMA100):
- * MOSI: Pin 11 / ICSP-4
- * MISO: Pin 12 / ICSP-1
- * SCK: Pin 13 / ISCP-3
- * SS/SDA (MSS on Velleman VMA405) : Pin 10
+ * //RFID Reader\\
+ * MOSI: Pin 11
+ * MISO: Pin 12
+ * SCK: Pin 13
+ * NSS: Pin 10
  * RST: Pin 9
- * VCC: 3,3V (DO NOT USE 5V, VMA405 WILL BE DAMAGED IF YOU DO SO)
- * GND: GND on Arduino UNO / Velleman VMA100
+ * VCC: 3,3V
+ * GND: GND
  * IRQ: not used
  */
 
 #include <SPI.h>
 #include <RFID.h>
+#include <SD.h>
 
 #define SS_PIN 10
 #define RST_PIN 9
@@ -97,3 +96,12 @@ void loop() {
 
     rfid.halt();
 }
+
+char* getTagID() {
+    string tagID = "";
+    for (int i = 0; i < 5; i++) {
+        tagID += rfid.serNum[i];
+    }
+    return tagID;
+}
+
