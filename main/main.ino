@@ -15,6 +15,7 @@
 #include <RFID.h>
 #include <SD.h>
 
+// Définition du capteur RFID
 #define SS_PIN 10
 #define RST_PIN 9
 
@@ -23,21 +24,55 @@ RFID rfid(SS_PIN, RST_PIN);
 int power = 7;
 int led = 8;
 int serNum[5];
+int cards[][5] = {{250, 253, 204, 106, 161}};
+bool access = false;
+
+// Mise en place de la BDD
+#define CS_PIN 4
+File database;
+
 /*
  * This integer should be the code of Your Mifare card / tag
  */
-int cards[][5] = {{250, 253, 204, 106, 161}};
-
-bool access = false;
 
 void setup() {
     Serial.begin(9600);
+
+    // Initialisation du capteur RFID
+    Serial.print("Initialisation du capteur RFID...");
     SPI.begin();
     rfid.init();
     pinMode(led, OUTPUT);
     pinMode(power, OUTPUT);
     digitalWrite(led, LOW);
     digitalWrite(power, LOW);
+    Serial.println("Capteur RFID initialisé.");
+
+    // Initialisation de la carte SD
+    Serial.print("Initialisation de la carte SD...");
+
+    if (!SD.begin(CS_PIN)) {
+        Serial.println("Carte SD non trouvée.");
+        while (true);
+    }
+
+    Serial.println("Carte SD initialisée.");
+
+    // test 
+    database = SD.open("test.txt");
+    if (database) {
+        Serial.println("test.txt:");
+
+        // read from the file until there's nothing else in it:
+        while (database.available()) {
+            Serial.write(database.read());
+        }
+        // close the file:
+        database.close();
+    } else {
+        // if the file didn't open, print an error:
+        Serial.println("error opening test.txt");
+    }
 }
 
 void loop() {
@@ -98,7 +133,7 @@ void loop() {
 }
 
 char* getTagID() {
-    string tagID = "";
+    char* tagID = "";
     for (int i = 0; i < 5; i++) {
         tagID += rfid.serNum[i];
     }
