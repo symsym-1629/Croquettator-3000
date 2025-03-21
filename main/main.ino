@@ -14,6 +14,8 @@
 #include <SPI.h>
 #include <RFID.h>
 #include <SD.h>
+#include <ArduinoJson.h>
+#include <ArduinoJson.hpp>
 
 // Définition du capteur RFID
 #define SS_PIN 10
@@ -30,6 +32,7 @@ bool access = false;
 // Mise en place de la BDD
 #define CS_PIN 4
 File database;
+JsonDocument jsonData;
 
 /*
  * This integer should be the code of Your Mifare card / tag
@@ -59,19 +62,13 @@ void setup() {
     Serial.println("Carte SD initialisée.");
 
     // test 
-    database = SD.open("test.txt");
+    database = SD.open("data.json");
     if (database) {
-        Serial.println("test.txt:");
-
-        // read from the file until there's nothing else in it:
         while (database.available()) {
             Serial.write(database.read());
-        }
-        // close the file:
-        database.close();
+    }
     } else {
-        // if the file didn't open, print an error:
-        Serial.println("error opening test.txt");
+        Serial.println('ca marche paaaaas');
     }
 }
 
@@ -79,7 +76,7 @@ void loop() {
     if (rfid.isCard()) {
         if (rfid.readCardSerial()) {
             for (int i = 0; i < 5; i++) {
-                Serial.print(rfid.serNum[0]);
+                Serial.print(rfid.serNum[i]);
                 Serial.print(" ");
             }
             Serial.println("");

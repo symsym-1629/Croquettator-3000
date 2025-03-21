@@ -1,0 +1,29 @@
+{
+    "1": {
+        "name": "Sandero",
+        "poids": 25,
+        "race": "berger australien",
+        "sexe": "m",
+        "p/j": 2,
+        "qt": 160,
+        "ID": [250, 107, 195, 106, 56]
+    },
+    "2": {
+        "name": "Roger",
+        "poids": 9,
+        "race": "teckel",
+        "sexe": "m",
+        "p/j": 3,
+        "qt": 33,
+        "ID": [250, 253, 204, 106, 161]
+    },
+    "3": {
+        "name": "Dacia",
+        "poids": 5,
+        "race": "chihuahua",
+        "sexe": "f",
+        "p/j": 5,
+        "qt": 10,
+        "ID": [163, 10, 20, 190, 3]
+    }
+}
