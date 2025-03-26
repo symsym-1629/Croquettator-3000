@@ -1,3 +1,4 @@
+
 /*
  * Pin layout should be as follows (on Arduino Uno - Velleman VMA100):
  * //RFID Reader\\
@@ -16,6 +17,9 @@
 #include <SD.h>
 #include <ArduinoJson.h>
 #include <ArduinoJson.hpp>
+#include <Dictionary.h>
+#include <DictionaryDeclarations.h>
+
 
 // Définition du capteur RFID
 #define SS_PIN 10
@@ -33,7 +37,7 @@ bool access = false;
 #define CS_PIN 4
 File database;
 JsonDocument jsonData;
-
+Dictionary &data = *(new Dictionary());
 /*
  * This integer should be the code of Your Mifare card / tag
  */
@@ -62,11 +66,14 @@ void setup() {
     Serial.println("Carte SD initialisée.");
 
     // test 
-    database = SD.open("data.json");
+    database = SD.open("data.txt");
     if (database) {
         while (database.available()) {
-            Serial.write(database.read());
-    }
+            data.jload(database);
+        }
+
+        // deserializeJson(jsonData, database);
+        Serial.println(data.json());
     } else {
         Serial.println('ca marche paaaaas');
     }
