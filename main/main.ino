@@ -20,7 +20,6 @@
 #include <Dictionary.h>
 #include <DictionaryDeclarations.h>
 
-
 // Définition du capteur RFID
 #define SS_PIN 10
 #define RST_PIN 9
@@ -38,9 +37,10 @@ bool access = false;
 File database;
 JsonDocument jsonData;
 Dictionary &data = *(new Dictionary());
-/*
- * This integer should be the code of Your Mifare card / tag
- */
+Dictionary animals[10];
+    /*
+     * This integer should be the code of Your Mifare card / tag
+     */
 
 void setup() {
     Serial.begin(9600);
@@ -58,23 +58,27 @@ void setup() {
     // Initialisation de la carte SD
     Serial.print("Initialisation de la carte SD...");
 
-    if (!SD.begin(CS_PIN)) {
+    if (!SD.begin(CS_PIN))
+    {
         Serial.println("Carte SD non trouvée.");
         while (true);
     }
 
     Serial.println("Carte SD initialisée.");
 
-    // test 
+    // test
     database = SD.open("data.txt");
     if (database) {
-        while (database.available()) {
+        while (database.available())
+        {
+
             data.jload(database);
         }
 
         // deserializeJson(jsonData, database);
         Serial.println(data.json());
-    } else {
+    }
+    else {
         Serial.println('ca marche paaaaas');
     }
 }
@@ -132,15 +136,30 @@ void loop() {
             digitalWrite(led, LOW);
         }
     }
-
     rfid.halt();
 }
 
 char* getTagID() {
-    char* tagID = "";
-    for (int i = 0; i < 5; i++) {
+    char *tagID = "";
+    for (int i = 0; i < 5; i++)
+    {
         tagID += rfid.serNum[i];
     }
     return tagID;
 }
 
+char[10] getDirectoryFromDirectory(File dir) {
+    int i = 0;
+    char dirList[];
+    dirList[0] = '\0'; // Initialize the string to be empty
+    while (true) {
+        File entry = dir.openNextFile();
+        if (!entry) {
+            break;
+        }
+        dirList[i] = entry.name();
+        entry.close();
+        i++;
+    }
+    return dirList;
+}
