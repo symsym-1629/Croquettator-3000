@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
             CroquettappTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Android",
+                        name = "Kilian",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
