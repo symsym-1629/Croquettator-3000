@@ -41,18 +41,15 @@ class MainActivity : ComponentActivity() {
             CroquettappTheme {
                 Scaffold(modifier = Modifier) { innerPadding ->
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
                     ) {
-                        Text("First item in list")
-                        HorizontalDivider(thickness = 2.dp)
-                        Text("Second item in list")
+                        DogInfos(
+                            modifier = Modifier.padding(innerPadding),
+                            name = dacia[0].toString(),
+                            weight = dacia[1].toString().toDouble(),
+                            croquettes = daciaCroquettes
+                        )
                     }
-                    DogInfos(
-                        modifier = Modifier.padding(innerPadding),
-                        name = dacia[0].toString(),
-                        weight = dacia[1].toString().toDouble(),
-                        croquettes = daciaCroquettes
-                    )
                 }
             }
         }

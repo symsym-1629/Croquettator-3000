@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "343087287375",
+    "project_id": "si-croquettapp",
+    "storage_bucket": "si-croquettapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:343087287375:android:f3f76ba04162850f25ae3a",
+        "android_client_info": {
+          "package_name": "com.example.croquettapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCd2Y7FA4rDR5St--d8SVTL5uJhIR9pgA8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
