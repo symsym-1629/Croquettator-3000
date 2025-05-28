@@ -12,6 +12,7 @@
  * IRQ: not used
  */
 
+// déclaration des librairies (y'en a plusieurs pour les tests du RFID) 
 #include <SPI.h>
 #include <RFID.h>
 #include <SD.h>
@@ -29,7 +30,7 @@ RFID rfid(SS_PIN, RST_PIN);
 int power = 7;
 int led = 8;
 int serNum[5];
-int cards[][5] = {{250, 253, 204, 106, 161}};
+int cards[][5] = {{250, 253, 204, 106, 161}}; // Liste des cartes autorisées par numéro de série
 bool access = false;
 
 // Mise en place de la BDD
@@ -38,9 +39,7 @@ File database;
 JsonDocument jsonData;
 Dictionary &data = *(new Dictionary());
 Dictionary animals[10];
-    /*
-     * This integer should be the code of Your Mifare card / tag
-     */
+
 
 void setup() {
     Serial.begin(9600);
@@ -66,7 +65,8 @@ void setup() {
 
     Serial.println("Carte SD initialisée.");
 
-    // test
+    // test pour la lecture / exploitation de la BDD
+    // TODO : faire fonctionner la BDD et mettre ca dans une fonction séparée
     database = SD.open("data.txt");
     if (database) {
         while (database.available())
@@ -82,8 +82,10 @@ void setup() {
         Serial.println('ca marche paaaaas');
     }
 }
-
+ // TODO : Faire l'affichage avec l'écran LCD
 void loop() {
+    // lecture de la carte RFID 
+    // TODO : mettre ca dans une fonction séparée
     if (rfid.isCard()) {
         if (rfid.readCardSerial()) {
             for (int i = 0; i < 5; i++) {
@@ -91,7 +93,7 @@ void loop() {
                 Serial.print(" ");
             }
             Serial.println("");
-
+// fonction pour vérifier si la carte est autorisée, pas touche, ca marche
             for (int x = 0; x < sizeof(cards); x++) {
                 for (int i = 0; i < sizeof(rfid.serNum); i++) {
                     if (rfid.serNum[i] != cards[x][i]) {
@@ -107,38 +109,22 @@ void loop() {
         }
 
         if (access) {
-            Serial.println("Welcome Velleman ");
-            /*
-             * Valid card : Switch ON the LED for 1000 ms (1 second)
-             */
-            digitalWrite(led, HIGH);
-            delay(1000);
-            /*
-             * Valid card : Switch ON the POWER PIN for 2000 ms (2 seconds)), the POWER PIN can activate for example a relais, controlling a doorlock)
-             */
-            digitalWrite(power, HIGH);
-            delay(2000);
-            digitalWrite(power, LOW);
-            digitalWrite(led, LOW);
-            access = false;
+            // carte autorisée 
+            Serial.println("Carte autorisée !");
+            // TODO : Récupérer les informations de la carte dans la BDD
+            // TODO : Peser l'animal
+            // TODO : Enregistrer le poids dans la BDD
+            // TODO : Distribuer la nourriture
         }
         else {
-            /*
-             * NON-Valid card : switch ON and OFF the LED twice for 0,5 seconds
-             */
-            Serial.println("Not allowed!");
-            digitalWrite(led, HIGH);
-            delay(500);
-            digitalWrite(led, LOW);
-            delay(500);
-            digitalWrite(led, HIGH);
-            delay(500);
-            digitalWrite(led, LOW);
+            // carte non autorisée
+            Serial.println("Carte non autorisée !");
         }
     }
     rfid.halt();
 }
 
+// Fonction pour récupérer l'ID de la carte RFID
 char* getTagID() {
     char *tagID = "";
     for (int i = 0; i < 5; i++)
@@ -148,6 +134,7 @@ char* getTagID() {
     return tagID;
 }
 
+// Fonction pour récupérer la liste des fichiers de la carte SD
 char[10] getDirectoryFromDirectory(File dir) {
     int i = 0;
     char dirList[];
